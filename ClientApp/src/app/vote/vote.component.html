@@ -1,0 +1,207 @@
+
+<div nz-row style="min-width: 300px;">
+  <div style="text-align:center"
+       nz-col
+       [nzXXl]="{span:18,offset:3}"
+       [nzXl]="{span:19,offset:3}"
+       [nzLg]="{span:18,offset:3}"
+       [nzMd]="{span:20,offset:2}"
+       [nzSm]="{span:20,offset:2}"
+       [nzXs]="{span:24,offset:0}">
+    <br />
+    <br />
+    <h2>به سامانه رای دهی خوش آمدید</h2>
+
+    <div *ngIf="form.type!=''">
+      <nz-alert [nzType]="form.type" [nzMessage]="form.message"></nz-alert>
+    </div>
+
+
+
+
+
+    <div *ngIf="form.level == 0">
+      <nz-card nzTitle="شماره عضویت خود را وارد نمایید ">
+        <input nz-input placeholder="شماره عضویت " [(ngModel)]="form.ozviyat" style="max-width:500px" />
+        <button nz-button nzType="primary" [disabled]="!match()" [nzLoading]="loading" (click)="goto1()">ادامه </button>
+        <h3> لطفاصفحه کلید را در حالت انگلیسی قرار دهید</h3>
+      </nz-card>
+
+    </div>
+
+
+    <div *ngIf="form.level == 1">
+      <nz-card nzTitle=" کد ارسال شده به تلفن همراه خود را وارد نمایید">
+        <input nz-input placeholder="کد پیامکی  " [(ngModel)]="form.code" style="max-width:500px" />
+        <button nz-button nzType="primary" [disabled]=" form.code.length!=5" [nzLoading]="loading" (click)="goto2()">ادامه </button>
+        <br />
+        <div style="direction: initial;">
+          <span>{{counter.min}} : {{counter.sec}}</span>
+        </div>
+        <br />
+        <div style="text-align:end">
+          <button nz-button nzDanger nzType="primary" (click)="form.level  =0">بازگشت و تغییر شماره عضویت </button>
+        </div>
+      </nz-card>
+
+    </div>
+
+
+
+    <div *ngIf="form.level == 2">
+      <nz-alert nzType="info" [nzMessage]="nzMessage" nzShowIcon>
+        <ng-template #nzMessage>
+          <div nz-row>
+            <div nz-col [nzXs]="12">
+              {{form.FirstName}}
+              {{form.LastName}}
+              خوش آمدید!
+            </div>
+            <div nz-col [nzXs]="12">
+              {{time}}
+            </div>
+          </div>
+        </ng-template>
+      </nz-alert>
+      <nz-card [nzTitle]="titleTemplate">
+        <ng-template #titleTemplate>
+          <div style="display:flex">
+            <div style="text-align:right;width:70%">
+              اعضای اصلی:
+              <br />
+              حداکثر تعداد مجاز انتخاب
+              {{form.max1}}
+
+              <br />
+              <span style="padding:5px" [ngStyle]="{'background-color':maxSelected(1)<=form.max1 ? '#317025' : 'red' }">
+                تعداد انتخاب شده:
+                {{ maxSelected(1)}}
+              </span>
+
+            </div>
+            <button nz-button nzType="primary" [disabled]="!oktovote()" (click)="confirmDialog = true" nzDanger>ثبت آرا</button>
+            <button nz-button nzDanger nzType="primary" (click)="exit()">خروج </button>
+
+          </div>
+
+
+        </ng-template>
+        <div nz-row>
+          <div nz-col
+               [nzXXl]="8"
+               [nzXl]="8"
+               [nzLg]="8"
+               [nzMd]="12"
+               [nzSm]="12"
+               [nzXs]="24"
+               *ngFor="let item of form.candidates1">
+            <div class="dashed" [class.green]="item.checked == true" nz-row>
+
+              <label nz-col [nzXs]="8" nz-checkbox [(ngModel)]="item.checked"></label>
+              <div nz-col [nzXs]="16" (click)="item.checked=!item.checked">
+                {{item.FirstName}}
+                <br />
+                {{item.LastName}}
+                <br />
+                {{item.Field}}
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+
+      </nz-card>
+
+
+      <nz-card [nzTitle]="titleTemplate2">
+        <ng-template #titleTemplate2>
+          <div style="display:flex">
+            <div style="text-align:right;width:70%">
+              بازرسین:
+              <br />
+              حداکثر تعداد مجاز انتخاب
+              {{form.max2}}
+
+              <br />
+              <span style="padding:5px" [ngStyle]="{'background-color':maxSelected(2)<=form.max2 ? '#317025' : 'red' }">
+                تعداد انتخاب شده:
+                {{ maxSelected(2)}}
+              </span>
+            </div>
+          </div>
+
+
+        </ng-template>
+        <div nz-row>
+          <div nz-col
+               [nzXXl]="8"
+               [nzXl]="8"
+               [nzLg]="8"
+               [nzMd]="12"
+               [nzSm]="12"
+               [nzXs]="24"
+               *ngFor="let item of form.candidates2">
+            <div class="dashed" [class.green]="item.checked == true" nz-row>
+
+              <label nz-col [nzXs]="8" nz-checkbox [(ngModel)]="item.checked"></label>
+              <div nz-col [nzXs]="16" (click)="item.checked=!item.checked">
+                {{item.FirstName}}
+                <br />
+                {{item.LastName}}
+                <br />
+                {{item.Field}}
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+
+      </nz-card>
+    </div>
+
+    <div *ngIf="form.level == 3">
+      <button nz-button nzDanger nzType="primary" (click)="exit()">خروج </button>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+<nz-modal [(nzVisible)]="confirmDialog"
+          [nzTitle]="modalTitle"
+          [nzContent]="modalContent"
+          [nzFooter]="modalFooter"
+          (nzOnCancel)="confirmDialog=false;">
+  <ng-template #modalTitle>
+    تایید نهایی
+  </ng-template>
+
+  <ng-template #modalContent>
+    آیا از انتخاب خود اطمینان دارید؟
+    <div *ngIf="confirmDialog">
+      اعضای اصلی انتخاب شده:
+      <div *ngFor="let item of form.candidates1">
+        <i *ngIf="item.checked">
+          "    {{item.FirstName + " " + item.LastName}}"
+        </i>
+      </div>
+      بازرسین انتخاب شده:
+      <div *ngFor="let item of form.candidates2">
+        <span *ngIf="item.checked">
+          "    {{item.FirstName + " " + item.LastName}}"
+        </span>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="confirmDialog=false"> خیر</button>
+    <button nz-button nzType="primary" (click)="goto3()" [nzLoading]="loading"> بله</button>
+  </ng-template>
+</nz-modal>

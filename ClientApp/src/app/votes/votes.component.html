@@ -1,0 +1,36 @@
+
+
+
+
+
+<ng-template #form let-item="item">
+ 
+
+
+</ng-template>
+
+<ng-template #viewMessage>
+  آیدی: 012331323
+</ng-template>
+<ng-template #search>
+
+
+
+</ng-template>
+
+
+<ng-template #tableBody let-item="item">
+  <td>{{ item.Id }}</td>
+  <td>{{ item.FirstName }}</td>
+  <td>{{ item.LastName }}</td>
+  <td>{{ item.EngineerId }}</td>
+  <td>{{ item.CandidaesId1 }}</td>
+  <td>{{ item.CandidaesId2 }}</td>
+
+</ng-template>
+
+
+
+
+<app-template *ngIf="ok" [com]="this"></app-template>
+

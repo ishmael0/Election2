@@ -1,0 +1,75 @@
+
+<button  nz-button (click)="get()">دریافت مجدد اطلاعات</button>
+<button  nz-button (click)="print()"> چاپ اطلاعات</button>
+<div id="table">
+  <nz-table #basicTable [nzData]="dataSet1" [nzShowPagination]="false" [nzLoading]="!ok" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>رديف</th>
+        <th>
+          نام
+        </th>
+        <th>
+          نام خانوادگی
+        </th>
+        <th>
+          رشته
+        </th>
+        <th>
+          تعداد آرا
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{data.Id}}</td>
+        <td>{{data.FirstName}}</td>
+        <td>{{data.LastName}}</td>
+        <td>{{data.Field}}</td>
+        <td>{{data.Count}}</td>
+      </tr>
+      <tr>
+        <td colspan="4">جمع کل</td>
+        <td>{{all1}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+
+
+<div id="table">
+  <nz-table #basicTable2 [nzData]="dataSet2" [nzShowPagination]="false" [nzLoading]="!ok" [nzFrontPagination]="false">
+    <thead>
+      <tr>
+        <th>رديف</th>
+        <th>
+          نام
+        </th>
+        <th>
+          نام خانوادگی
+        </th>
+        <th>
+          رشته
+        </th>
+        <th>
+          تعداد آرا
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable2.data">
+        <td>{{data.Id}}</td>
+        <td>{{data.FirstName}}</td>
+        <td>{{data.LastName}}</td>
+        <td>{{data.Field}}</td>
+        <td>{{data.Count}}</td>
+      </tr>
+      <tr>
+        <td colspan="4">جمع کل</td>
+        <td>{{all2}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+

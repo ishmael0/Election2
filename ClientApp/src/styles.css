@@ -1,0 +1,12 @@
+.dashed {
+  border-style: dashed;
+  color: #ff4d4f;
+  background: #fff;
+  border-color: #ff4d4f;
+  border-width:1px;
+  margin:5px;
+  padding:5px;
+}
+.green {
+  border-color: #317025;
+}

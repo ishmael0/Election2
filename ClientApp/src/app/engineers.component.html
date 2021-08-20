@@ -1,0 +1,111 @@
+
+
+
+
+
+<ng-template #form let-item="item">
+  <form nz-form [formGroup]="item">
+
+
+
+
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="FirstName">نام</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="نام را وارد کنید">
+        <input nz-input formControlName="FirstName" />
+      </nz-form-control>
+    </nz-form-item>
+
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="LastName">نام خانوادگی</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="نام خانوادگی را وارد کنید">
+        <input nz-input formControlName="LastName" />
+      </nz-form-control>
+    </nz-form-item>
+
+
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Shenasname"> Shenasname</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="شماره شناسنامه  را وارد کنید">
+        <input nz-input formControlName="Shenasname" />
+      </nz-form-control>
+    </nz-form-item>
+
+
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Phone">شماره تماس</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="شماره تماس را وارد کنید">
+        <input nz-input formControlName="Phone" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Ozviat">شماره عضویت</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="شماره عضویت را وارد کنید">
+        <input nz-input formControlName="Ozviat" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Parvane">شماره پروانه</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="شماره پروانه را وارد کنید">
+        <input nz-input formControlName="Parvane" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Licence"> مدرک</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="مدرک را وارد کنید">
+        <input nz-input formControlName="Licence" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="IsOK"> رای داده است؟</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="شماره تماس را وارد کنید">
+        <label nz-checkbox formControlName="IsOK">Checkbox</label>
+      </nz-form-control>
+    </nz-form-item>
+
+
+
+    <button nz-button [disabled]="item.controls.IsOK.value === false  " nzDanger nzType="primary" (click)="ResetVote()">حذف رای  </button>
+
+
+
+    
+
+
+  </form>
+ 
+ 
+
+</ng-template>
+
+<ng-template #viewMessage>
+  آیدی: 012331323
+</ng-template>
+<ng-template #search>
+
+   
+
+</ng-template>
+
+
+<ng-template #tableBody let-item="item">
+  <td>{{ item.Id }}</td>
+  <td>{{ item.FirstName }}</td>
+  <td>{{ item.LastName }}</td>
+  <td>{{ item.Shenasname }}</td>
+  <td>{{ item.Phone }}</td>
+  <td>{{ item.Ozviat }}</td>
+  <td>{{ item.Parvane }}</td>
+  <td>{{ item.Licence }}</td>
+  <td>{{ item.IsOK ? "بله":"خیر" }}</td>
+</ng-template>
+
+
+
+
+<app-template *ngIf="ok" [com]="this"></app-template>
+
