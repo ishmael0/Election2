@@ -18,19 +18,21 @@ const routes: Routes = [
   },
   {
     path: 'electiondb2', loadChildren: () => import('./Election2.module').then(m => m.Election2Module),
-    data: { key: 'ElectionDB2', label: ' مدیریت وب سایت' }
+    data: {
+      key: 'ElectionDB2', label: '      وب سایت رای گیری سازمان نظام کاردانی ساختمان استان ایلام'
+    }
   },
   { path: 'webselector', component: WebSelectorComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'vote', loadChildren: () => import('./vote.module').then(m => m.VoteModule)},
+  { path: 'vote', loadChildren: () => import('./vote.module').then(m => m.VoteModule) },
 ];
 
- 
+
 
 @NgModule({
   declarations: [
     AppComponent,
-   ],
+  ],
   imports: [
     RouterModule.forRoot(routes),
     SharedModule.forRoot(),
@@ -40,8 +42,8 @@ const routes: Routes = [
 })
 export class AppModule {
   constructor(wss: WebSiteService) {
-    wss.logInDesc = '  وب سايت اخذ رای      ';
- }
+    wss.logInDesc = '        وب سایت رای گیری سازمان نظام کاردانی ساختمان استان ایلام     ';
+  }
 }
 
 

@@ -86,11 +86,11 @@ namespace Election2.Models
         public async Task<JsonResult> l3(string m, string o, string token, [FromBody] VoteLists v)
         {
             if (string.IsNullOrWhiteSpace(m))
-                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "مشکلی روی داده است" });
+                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "شماره همراه ارسالی شما نامعتبر است" });
             if (string.IsNullOrWhiteSpace(token))
-                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "مشکلی روی داده است" });
+                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "شماره توکن شما نامعتبر است" });
             if (string.IsNullOrWhiteSpace(o))
-                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "مشکلی روی داده است" });
+                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "شماره عضویت شما نامعتبر است" });
             var data = await _context.Engineer.FirstOrDefaultAsync(c => c.Ozviat == o);
             if (data == null)
                 return JR(StatusCodes.Status200OK, "", new { type = "error", message = "چنین شماره عضویتی یافت نشد" });
@@ -108,7 +108,7 @@ namespace Election2.Models
             vote.LastName = data.LastName;
 
             if (v.v1.Count > max1 || v.v2.Count > max2)
-                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "مشکلی روی داده است" });
+                return JR(StatusCodes.Status200OK, "", new { type = "error", message = "آرای ارسالی صحیح نیست" });
 
             _context.Add(vote);
             if (v.v1 == null) v.v1 = new List<int>();
@@ -135,7 +135,7 @@ namespace Election2.Models
             if (string.IsNullOrWhiteSpace(data.Phone) || data.Phone.Length != 10)
                 return JR(StatusCodes.Status200OK, "", new { type = "error", message = "مشکلی در شماره تماس ثبت شده شما پیش آمده است، لطفا با مدیر سیستم تماس بگیرید" });
             data.TempCode = Extentions.PassWordGenerator(0, 0, 5, 0);
-            data.TempCode = "12345";
+            //data.TempCode = "12345";
             try
             {
                 using (var client = new HttpClient())
@@ -154,11 +154,11 @@ namespace Election2.Models
             {
                 return JR(StatusCodes.Status200OK, "", new { type = "error", message = "مشکلی روی داده است" });
             }
-            data.TempCodeExpire = DateTime.Now.AddSeconds(30);
+            data.TempCodeExpire = DateTime.Now.AddSeconds(120);
             data.Token = "";
             await _context.SaveChangesAsync();
             var phone = data.Phone.Substring(0, 3) + "****" + data.Phone.Substring(7);
-            return JR(StatusCodes.Status200OK, "", new { phone = phone, type = "success", message = "     یک کد 5 رقمی به شماره " + phone + " ارسال شد" });
+            return JR(StatusCodes.Status200OK, "", new { data.FirstName, data.LastName, phone = phone, type = "success", message = "     یک کد 5 رقمی به شماره " + phone + " ارسال شد" });
         }
         [HttpGet]
         public async Task<JsonResult> l2(string m, string o)
@@ -178,10 +178,10 @@ namespace Election2.Models
 
             if (data.TempCode != m)
                 return JR(StatusCodes.Status200OK, "", new { type = "error", message = "کد پیامکی شما  اشتباه است" });
-            data.Token = Extentions.PassWordGenerator(10, 10, 10, 10);
+            data.Token = Extentions.PassWordGenerator(10, 10, 10, 0);
             await _context.SaveChangesAsync();
 
-            return JR(StatusCodes.Status200OK, "", new { data.FirstName, data.LastName, candidates1, candidates2, max1, max2, token = data.Token, type = "success", message = "  شما مجاز به رای دهی هستید" });
+            return JR(StatusCodes.Status200OK, "", new { candidates1, candidates2, max1, max2, token = data.Token, type = "success", message = "  شما مجاز به رای دهی هستید" });
         }
     }
 
@@ -206,6 +206,46 @@ namespace Election2.Models
             _context.Entry(t).Property(c => c.IsOK).IsModified = true;
             await _context.SaveChangesAsync();
             return JR(StatusCodes.Status200OK, "رای مهندس حذف شد");
+        }
+    }
+
+    public class VoteController : BaseController<ElectionDB2, Vote>
+    {
+
+        public UserPermissionManager Upm;
+        public VoteController(ElectionDB2 dbContext, UserPermissionManager upm) : base(dbContext, upm)
+        {
+            Upm = upm;
+        }
+        [HttpPost]
+        public override async Task<JsonResult> Export([FromQuery] IDictionary<string, string> param, [FromBody] List<ExportHelper> cols)
+        {
+            var list = BuildRequest(param);
+            var getList_ = await list.ToListAsync();
+            var getList = getList_.Select(c => new VoteExportHelper()
+            {
+                CandidaesId1 = c.CandidaesId1.Select(d=> ElectionController.candidates1.FirstOrDefault(e=>e.Id == d).FirstName + " " + ElectionController.candidates1.FirstOrDefault(e => e.Id == d).LastName).ToList(),
+                CandidaesId2 = c.CandidaesId2.Select(d=> ElectionController.candidates2.FirstOrDefault(e=>e.Id == d).FirstName + " " + ElectionController.candidates2.FirstOrDefault(e => e.Id == d).LastName).ToList(),
+                Create = c.Create,
+                Engineer = c.Engineer,
+                EngineerId = c.EngineerId,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+              Status=  c.Status,
+             Id=   c.Id
+            }).ToList();
+            var name = typeof(Engineer).Name + "_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".xlsx";
+            if (cols == null)
+                await Extentions.ToExcelAsync(getList, typeof(Engineer).Name, Extentions.GetBaseFolder(GetUserID() + "/" + name));
+            else
+                await Extentions.ToExcelAsync(getList, typeof(Engineer).Name, Extentions.GetBaseFolder(GetUserID() + "/" + name), cols);
+            //DbContext.ReportEntities.Add(new ReportEntity() { 
+            //    Create = DateTime.Now, 
+            //    Status = Statuses.Active,
+            //    Title = typeof(T).Name, 
+            //    Url = name,
+            //    Name = param["downloadExportedFileName"] });
+            return JR(StatusCodes.Status200OK, "", new { name });
         }
     }
 
@@ -273,6 +313,16 @@ namespace Election2.Models
         public int EngineerId { set; get; }
         public List<int> CandidaesId1 { set; get; }
         public List<int> CandidaesId2 { set; get; }
+    }   
+    public class VoteExportHelper : BaseModel
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        [ForeignKey("EngineerId")]
+        public Engineer Engineer { set; get; }
+        public int EngineerId { set; get; }
+        public List<string> CandidaesId1 { set; get; }
+        public List<string> CandidaesId2 { set; get; }
     }
     public class ElectionDB2 : BaseWebSiteDBContext
     {

@@ -109,8 +109,8 @@ export const config: WebSitesConfiguration = new WebSitesConfiguration('Election
         new PropertyConfiguration('FirstName', ' نام', { Type: 'string', Validators: [Validators.required], InTable: true }),
         new PropertyConfiguration('LastName', ' نام خانوادگی', { Type: 'string', Validators: [Validators.required], InTable: true }),
         new PropertyConfiguration('EngineerId', ' شناسه', { Type: 'number', Validators: [Validators.required], InTable: true }),
-        new PropertyConfiguration('CandidaesId1', ' آرا ', { Type: 'custom', Validators: [Validators.required], InTable: true }),
-        new PropertyConfiguration('CandidaesId2', ' آرا ', { Type: 'custom', Validators: [Validators.required], InTable: true }),
+        new PropertyConfiguration('CandidaesId1', ' آرای اعضای اصلی ', { Type: 'list', Validators: [Validators.required], InTable: true }),
+        new PropertyConfiguration('CandidaesId2', ' آرای بازرسین ', { Type: 'list', Validators: [Validators.required], InTable: true }),
       ]
     }),
 

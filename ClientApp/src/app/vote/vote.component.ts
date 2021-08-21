@@ -88,6 +88,8 @@ export class VoteComponent implements OnInit {
       if (this.form.type == "success") {
         this.form.level = 1;
         this.form.phone = d.data.phone;
+        this.form.FirstName = d.data.FirstName;
+        this.form.LastName = d.data.LastName;
         this.startTimer();
       }
       this.loading = false;
@@ -113,8 +115,7 @@ export class VoteComponent implements OnInit {
         this.form.candidates2 = d.data.candidates2;
         this.form.max1 = d.data.max1;
         this.form.max2 = d.data.max2;
-        this.form.FirstName = d.data.FirstName;
-        this.form.LastName = d.data.LastName;
+
         this.form.level = 2;
       }
       this.loading = false;

@@ -10,7 +10,9 @@
        [nzXs]="{span:24,offset:0}">
     <br />
     <br />
-    <h2>به سامانه رای دهی خوش آمدید</h2>
+    <h2>
+      وب سایت رای گیری سازمان نظام کاردانی ساختمان استان ایلام
+    </h2>
 
     <div *ngIf="form.type!=''">
       <nz-alert [nzType]="form.type" [nzMessage]="form.message"></nz-alert>
@@ -31,6 +33,20 @@
 
 
     <div *ngIf="form.level == 1">
+      <nz-alert nzType="info" [nzMessage]="nzMessage" nzShowIcon>
+        <ng-template #nzMessage>
+          <div nz-row>
+            <div nz-col [nzXs]="12">
+              {{form.FirstName}}
+              {{form.LastName}}
+              خوش آمدید!
+            </div>
+            <div nz-col [nzXs]="12">
+              {{time}}
+            </div>
+          </div>
+        </ng-template>
+      </nz-alert>
       <nz-card nzTitle=" کد ارسال شده به تلفن همراه خود را وارد نمایید">
         <input nz-input placeholder="کد پیامکی  " [(ngModel)]="form.code" style="max-width:500px" />
         <button nz-button nzType="primary" [disabled]=" form.code.length!=5" [nzLoading]="loading" (click)="goto2()">ادامه </button>
